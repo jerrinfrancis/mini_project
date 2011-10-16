@@ -171,7 +171,7 @@ public class DBcreate {
             Statement stmt = conn.createStatement();
             String tablename = "allocated_HR";
             String query = "CREATE TABLE " + tablename + " (pid number(8) REFERENCES " + 
-                    "project(proj_id),specid number(8) REFERENCES specialisation(spec_id))";
+                    "project(proj_id),specid number(8) REFERENCES specialisation(spec_id),qty number(8))";
             stmt.executeUpdate(query);
             conn.commit();
         }catch(SQLException ex){
@@ -212,7 +212,7 @@ public class DBcreate {
     public static void Destroy_Entire_Database() throws SQLException{
         try{
             Statement stmt = conn.createStatement();
-            stmt.executeUpdate("DROP TABLE allocated_HR ");
+            //stmt.executeUpdate("DROP TABLE allocated_HR ");
             stmt.executeUpdate("DROP TABLE allocated_employees ");
             stmt.executeUpdate("DROP TABLE hr_total_avail ");
             stmt.executeUpdate("DROP TABLE employee ");
@@ -245,8 +245,8 @@ class tes{
     public static void main(String args[]) throws Throwable {
         try{
         DBcreate Db = new DBcreate();
-       // Db.Set_Database_Creation_Tables();
-     //  Db.Destroy_Entire_Database();      
+        Db.Set_Database_Creation_Tables();
+  //    Db.Destroy_Entire_Database();      
             }
         catch(ClassNotFoundException e)
         {

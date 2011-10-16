@@ -18,23 +18,31 @@ import javax.swing.*;
  * @author user
  */
 public class employeedetails extends javax.swing.JPanel {
-    private Vector<Vector<String>> data;
-    private Vector<String> header;
+    private static Vector<Vector<String>> data;
+    private static Vector<String> header;
+    public static String searchstring;
+    public static String searchcategory;
+    private static javax.swing.table.DefaultTableModel model;
     /** Creates new form employeedetails */
     public employeedetails() {
         data = new Vector<Vector<String>>();
         try{
              DBquery d = new DBquery();
-             ResultSet rs = d.generalQuery("SELECT * FROM test3");
+             ResultSet rs = d.generalQuery("SELECT emp_name,proj_name,EXTRACT(year from (sysdate))-EXTRACT(year from joindate) as experience,phone "
+                     + "FROM employee,project,allocated_employees WHERE allocated_employees.empid = employee.emp_id AND allocated_employees.pid = project.proj_id");
              while(rs.next()){
                  Vector<String> row = new Vector<String>();
                  row.add(rs.getString(1));
                  row.add(rs.getString(2));
+                 row.add(Integer.toString(rs.getInt(3)));
+                 row.add(rs.getString(4));
                  data.add(row);
              }
              header = new Vector<String>();
-             header.add("Employee ID");
-             header.add("Project ID");
+             header.add("Employee Name");
+             header.add("Project Name");
+             header.add("Experience");
+             header.add("Phone No.");
         }catch(Exception e){
             System.out.println("test exception caught");
             e.printStackTrace();
@@ -67,9 +75,14 @@ public class employeedetails extends javax.swing.JPanel {
         jLabel1.setForeground(new java.awt.Color(0, 51, 153));
         jLabel1.setText("Employee Details");
 
-        searchbutton.setFont(new java.awt.Font("Cooper Black", 0, 12)); // NOI18N
+        searchbutton.setFont(new java.awt.Font("Cooper Black", 0, 12));
         searchbutton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/UIcomponents/Search_icon.png"))); // NOI18N
         searchbutton.setText("Search");
+        searchbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchbuttonActionPerformed(evt);
+            }
+        });
 
         logoutbutton.setFont(new java.awt.Font("Cooper Black", 0, 12));
         logoutbutton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/UIcomponents/logout.gif"))); // NOI18N
@@ -80,7 +93,7 @@ public class employeedetails extends javax.swing.JPanel {
             }
         });
 
-        jTable1.setFont(new java.awt.Font("Arial Unicode MS", 0, 13));
+        jTable1.setFont(new java.awt.Font("Arial Unicode MS", 0, 13)); // NOI18N
         jTable1.setForeground(new java.awt.Color(0, 51, 153));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(data,header));
         jScrollPane1.setViewportView(jTable1);
@@ -98,14 +111,14 @@ public class employeedetails extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(searchbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 331, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 340, Short.MAX_VALUE)
                                 .addComponent(logoutbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 643, Short.MAX_VALUE))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 652, Short.MAX_VALUE))
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 220, Short.MAX_VALUE)
+                        .addGap(225, 225, 225)
                         .addComponent(jLabel1)
-                        .addContainerGap(221, Short.MAX_VALUE))))
+                        .addGap(225, 225, 225))))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {logoutbutton, searchbutton});
@@ -127,10 +140,8 @@ public class employeedetails extends javax.swing.JPanel {
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {logoutbutton, searchbutton});
 
     }// </editor-fold>//GEN-END:initComponents
-
-private void logoutbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutbuttonActionPerformed
-// TODO add your handling code here:
-    data = new Vector<Vector<String>>();
+public static void updateTable(){
+    data.clear();
     try{
              DBquery d = new DBquery();
              ResultSet rs = d.generalQuery("SELECT * FROM test3 WHERE proid = 1");
@@ -140,16 +151,50 @@ private void logoutbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
                  row.add(rs.getString(2));
                  data.add(row);
              }
-             header = new Vector<String>();
-             header.add("Employee ID");
-             header.add("Project ID");
-             jTable1.setModel(new javax.swing.table.DefaultTableModel(data,header));
+             model.fireTableDataChanged();
         }catch(Exception e){
             System.out.println("test exception caught");
             e.printStackTrace();
         }
     
+}
+    
+    
+private void logoutbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutbuttonActionPerformed
+// TODO add your handling code here:
+    data.clear();
+    try{
+             DBquery d = new DBquery();
+             ResultSet rs = d.generalQuery("SELECT * FROM test3 WHERE proid = 1");
+             while(rs.next()){
+                 Vector<String> row = new Vector<String>();
+                 row.add(rs.getString(1));
+                 row.add(rs.getString(2));
+                 data.add(row);
+             }
+             /*header = new Vector<String>();
+             header.add("Employee ID");
+             header.add("Project ID");*/
+             javax.swing.table.DefaultTableModel k = (javax.swing.table.DefaultTableModel)jTable1.getModel();
+             k.fireTableDataChanged();
+        }catch(Exception e){
+            System.out.println("test exception caught");
+            e.printStackTrace();
+        }
+    
+    
+    
 }//GEN-LAST:event_logoutbuttonActionPerformed
+
+private void searchbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchbuttonActionPerformed
+    //System.out.println(searchstring + "," + searchcategory);
+    this.setEnabled(false);
+    model = (javax.swing.table.DefaultTableModel)jTable1.getModel();
+    Searchform s = new Searchform();
+    s.setVisible(true);
+    //System.out.println(searchstring + "," + searchcategory);
+    
+}//GEN-LAST:event_searchbuttonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;

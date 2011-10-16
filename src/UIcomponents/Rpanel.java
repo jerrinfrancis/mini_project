@@ -297,7 +297,7 @@ private void submitbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                     JOptionPane.WARNING_MESSAGE);
             throw(new Exception());
         }
-        int test = Integer.parseInt(phno);
+        double test = Double.parseDouble(phno);
         int status=0;
         Employee emp = new Employee(empid,name,address,spec_id,phno,jy1,jm1,jd1,status);
         DBinsert d = new DBinsert();

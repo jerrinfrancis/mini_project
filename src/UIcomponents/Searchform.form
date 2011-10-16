@@ -1,12 +1,12 @@
 <?xml version="1.1" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
-  <Properties>
-    <Property name="defaultCloseOperation" type="int" value="3"/>
-  </Properties>
+<Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
   </SyntheticProperties>
+  <Events>
+    <EventHandler event="windowClosed" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowClosed"/>
+  </Events>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -31,18 +31,18 @@
                   <Group type="102" alignment="0" max="-2" attributes="0">
                       <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel2" linkSize="2" min="-2" pref="83" max="-2" attributes="0"/>
-                          <Component id="jLabel3" linkSize="2" min="-2" max="-2" attributes="0"/>
+                          <Component id="stringlabel" linkSize="2" min="-2" pref="83" max="-2" attributes="0"/>
+                          <Component id="categlabel" linkSize="2" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jComboBox1" linkSize="1" alignment="0" min="-2" pref="181" max="-2" attributes="0"/>
-                          <Component id="jTextField1" linkSize="1" alignment="0" min="-2" pref="181" max="-2" attributes="0"/>
+                          <Component id="categcombo" linkSize="1" alignment="0" min="-2" pref="181" max="-2" attributes="0"/>
+                          <Component id="stringfield" linkSize="1" alignment="0" min="-2" pref="181" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="67" max="-2" attributes="0"/>
-                      <Component id="jButton1" min="-2" pref="174" max="-2" attributes="0"/>
+                      <Component id="startsearchbtn" min="-2" pref="174" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace pref="22" max="32767" attributes="0"/>
@@ -56,16 +56,16 @@
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabel2" linkSize="3" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
-                  <Component id="jTextField1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="stringlabel" linkSize="3" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
+                  <Component id="stringfield" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jComboBox1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel3" linkSize="3" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="categcombo" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="categlabel" linkSize="3" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
-              <Component id="jButton1" min="-2" pref="40" max="-2" attributes="0"/>
+              <Component id="startsearchbtn" min="-2" pref="40" max="-2" attributes="0"/>
               <EmptySpace pref="29" max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -83,14 +83,14 @@
         <Property name="text" type="java.lang.String" value="Search"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel2">
+    <Component class="javax.swing.JLabel" name="stringlabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="Search String"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="jTextField1">
+    <Component class="javax.swing.JTextField" name="stringfield">
     </Component>
-    <Component class="javax.swing.JComboBox" name="jComboBox1">
+    <Component class="javax.swing.JComboBox" name="categcombo">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="4">
@@ -102,18 +102,21 @@
         </Property>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel3">
+    <Component class="javax.swing.JLabel" name="categlabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="Search Category"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton1">
+    <Component class="javax.swing.JButton" name="startsearchbtn">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Cooper Black" size="14" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Start Search"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="startsearchbtnActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
