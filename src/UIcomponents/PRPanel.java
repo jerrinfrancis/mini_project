@@ -7,6 +7,7 @@
  * PRPanel.java
  *
  * Created on Oct 9, 2011, 7:38:19 AM
+ * Test templates.
  */
 package UIcomponents;
 import java.sql.*;
