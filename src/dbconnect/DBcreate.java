@@ -49,7 +49,7 @@ public class DBcreate {
                     " enddate date,priority number(2),deliv_date date,revenue_gen number(5),status number(1))");
             conn.commit();
         }catch(SQLException ex){
-            System.out.println("SQLException in createProjectTable()");
+            System.out.println("SQLException in Create_Project_Table()");
             throw(ex);
         }
     }
@@ -66,7 +66,7 @@ public class DBcreate {
             conn.commit();
             
         }catch(SQLException ex){
-            System.out.println("SQLException in createResourceTable()");
+            System.out.println("SQLException in Create_Resource_Table()");
             throw(ex);
         }
     }
@@ -180,6 +180,21 @@ public class DBcreate {
         }
     }
     
+ 
+    public static void Create_Waiting_HR() throws SQLException{
+        try{
+            Statement stmt = conn.createStatement();
+            String tablename = "waiting_HR";
+            String query = "CREATE TABLE " + tablename + " (spec_id number(8) REFERENCES " + 
+                    "specialisation(spec_id),qty number(8))";
+            stmt.executeUpdate(query);
+            conn.commit();
+        }catch(SQLException ex){
+            System.out.println("SQLException in Create_Waiting_HR()");
+            throw(ex);
+        }
+    }
+    
      public static void Create_Other_Table(String query) throws SQLException{
         try{
             Statement stmt = conn.createStatement();
@@ -202,17 +217,20 @@ public class DBcreate {
         Create_Self_Updated_HR_Total_Avail();
         Create_Allocated_Employees();
         Create_Allocated_HR_Pattern();
+        Create_Waiting_HR();
+        System.out.println("Creation succesful");
             }
         catch(SQLException ex)
         {
-        System.out.println("SQLEXception in");
+        System.out.println("SQLEXception in Set_Database_Creation_Tables()");
         throw(ex);
         }
     } 
     public static void Destroy_Entire_Database() throws SQLException{
         try{
             Statement stmt = conn.createStatement();
-            //stmt.executeUpdate("DROP TABLE allocated_HR ");
+            stmt.executeUpdate("DROP TABLE waiting_HR ");
+            stmt.executeUpdate("DROP TABLE allocated_HR ");
             stmt.executeUpdate("DROP TABLE allocated_employees ");
             stmt.executeUpdate("DROP TABLE hr_total_avail ");
             stmt.executeUpdate("DROP TABLE employee ");
@@ -224,9 +242,10 @@ public class DBcreate {
             stmt.executeUpdate("DROP SEQUENCE rid_seq ");
             stmt.executeUpdate("DROP TABLE project ");
             stmt.executeUpdate("DROP SEQUENCE pid_seq ");
+            System.out.println("DROP SUCCESSFUL");
         }
         catch(SQLException ex){
-            System.out.println("SQLException in createOtherTable()");
+            System.out.println("SQLException in Destroy_Entire_Database()");
             throw(ex);
         }
     
@@ -246,7 +265,7 @@ class tes{
         try{
         DBcreate Db = new DBcreate();
         Db.Set_Database_Creation_Tables();
-  //    Db.Destroy_Entire_Database();      
+  //   Db.Destroy_Entire_Database();      
             }
         catch(ClassNotFoundException e)
         {
