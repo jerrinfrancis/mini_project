@@ -185,7 +185,7 @@ public class DBcreate {
         try{
             Statement stmt = conn.createStatement();
             String tablename = "waiting_HR";
-            String query = "CREATE TABLE " + tablename + " (spec_id number(8) REFERENCES " + 
+            String query = "CREATE TABLE " + tablename + " (pid number(8) REFERENCES project(proj_id),spec_id number(8) REFERENCES " + 
                     "specialisation(spec_id),qty number(8))";
             stmt.executeUpdate(query);
             conn.commit();
