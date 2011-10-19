@@ -40,21 +40,14 @@ public class DBinsert {
     }
     
     public static void addProject(Project p) throws SQLException{
-        //Connection conn = DriverManager.getConnection(url,uname,passwd);
         try{
-            
-        
-            PreparedStatement ps = conn.prepareStatement(
-                        "INSERT INTO project VALUES(pid_seq.nextval,?,?,?,?,?)");
-            
-            ps.setString(1,p.getProName());
-            java.sql.Date sqlstartdate = new java.sql.Date(p.startdate.getTime());
-            java.sql.Date sqlenddate = new java.sql.Date(p.enddate.getTime());
-            java.sql.Date sqldeldate = new java.sql.Date(p.deldate.getTime());
-            ps.setDate(2,sqlstartdate);
-            ps.setDate(3,sqlenddate);
-            ps.setInt(4,p.getProPriority());
-            ps.setDate(5,sqldeldate);
+            Statement ap = conn.createStatement();
+            String st="INSERT INTO project VALUES(pid_seq.nextval,'"+ p.getProName()
+                    + "','" + p.get_Startdate() + "','" + p.get_Enddate() + "'," + p.getProPriority()
+                    + ",'" + p.get_Deldate() +"'," + p.get_revenue() +"," + p.get_status() + ")";
+            ap.executeUpdate(st);
+            System.out.println(ap);        
+            conn.commit();
             
         }catch(SQLException ex){
             System.out.println("SQLException in addProject()");
@@ -63,7 +56,6 @@ public class DBinsert {
     }
     
     public static void addResource(Resource r) throws SQLException{
-        //Connection conn = DriverManager.getConnection(url,uname,passwd);
         try{
             
            Statement ps = conn.createStatement();
@@ -82,9 +74,6 @@ public class DBinsert {
     
     public static void addEmployee(Employee e) throws SQLException{
         try{
-           // System.out.println(e.join_date);
-           // java.sql.Date sqljoindate =  new java.sql.Date((new GregorianCalendar(e.jy,e.jm,e.jd)).getTime().getTime());
-           // System.out.println(sqljoindate);
             String st =  "INSERT INTO employee VALUES ('" +
                          e.getEmpID() + "','" + e.getName() + "','" +
                     e.getAddress() + "'," + e.getSpec() +",'" + e.getPhone()+ "',"
@@ -92,18 +81,6 @@ public class DBinsert {
             Statement stat = conn.createStatement();
             System.out.println(st);
             stat.executeQuery(st);
-          /*  PreparedStatement ps = conn.prepareStatement(
-                    "INSERT INTO employee VALUES (?,?,?,?,?,?,?)");
-            System.out.println("hai");
-            ps.setString(1,e.getEmpID());
-            ps.setString(2,e.getName());
-            ps.setString(3,e.getAddress());
-            ps.setInt(4,e.getSpec());
-            ps.setString(5,e.getPhone());
-            
-            ps.setInt(6,e.getStat());
-            ps.setDate(7, sqljoindate);
-            System.out.println("hai");*/
             conn.commit();
         }catch(SQLException ex){
             System.out.println("SQLException in addEmployee()");

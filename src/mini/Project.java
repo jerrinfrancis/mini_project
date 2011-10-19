@@ -19,18 +19,25 @@ public class Project {
     private int end_year;
     private int end_month;
     private int end_day;
-    private short priority;
-    public java.util.Date startdate;
-    public java.util.Date enddate;
-    public java.util.Date deldate;
-    
-    public Project(String name,int sy,int sm,int sd,int ey,int em,int ed,short p,
-            int dy,int dm,int dd){
+    private int priority;
+    private String [] month={"JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"};
+    private int del_day,del_month,del_year;
+    private int duration;
+    private int revenue;    
+    public Project(String name,int sy,int sm,int sd,int ey,int em,int ed,int p,
+            int dy,int dm,int dd,int due){
       
         proj_name = name;
-        startdate = new Date(sy,sm,sd);
-        enddate = new Date(ey,em,ed);
-        deldate = new Date(dy,dm,dd);
+        start_year=sy;
+        start_month=sm;
+        start_day=sd;
+        end_year=ey;
+        end_month=em;
+        end_day=ed;
+        del_day=dd;
+        del_month=dm;
+        del_year=dy;
+        duration=due;
         priority = p;
     }
     
@@ -42,6 +49,22 @@ public class Project {
     public int getProPriority(){
         return priority;
     }
+     public String get_Startdate(){
+        String temp = start_day + "-" + month[start_month-1] +"-" + start_year ;
+        return temp;
+        }
+     public String get_Enddate(){
+        String temp = end_day + "-" + month[end_month-1] +"-" + end_year ;
+        return temp;
+        }
+     public String get_Deldate(){
+        String temp = del_day + "-" + month[del_month-1] +"-" + del_year ;
+        return temp;
+        }
+     public int get_duration()
+     {
+         return duration;
+     }
 };
 
 

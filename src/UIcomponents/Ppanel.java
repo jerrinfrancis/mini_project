@@ -12,6 +12,7 @@ package UIcomponents;
 import dbconnect.*;
 import java.util.Vector;
 import java.sql.*;
+import mini.*;
 /**
  *
  * @author user
@@ -237,6 +238,7 @@ public class Ppanel extends javax.swing.JPanel {
 
 private void submitbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitbuttonActionPerformed
 try{
+    Project P;
     int num_rows_hr,num_rows_phy;
     num_rows_hr=hrtable.getModel().getRowCount();
     num_rows_phy=phytable.getModel().getRowCount();
@@ -303,7 +305,7 @@ String query2,query3,query4,query5;
 DBinsert update_phy = new DBinsert();
 if(flag_hr==0 && flag_phy==0)
 {
-        
+       String project_add; 
     while(i<num_rows_phy)
     {
         phyres_n=phytable.getValueAt(i, 0);
