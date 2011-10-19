@@ -96,10 +96,7 @@
                       </Group>
                       <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" attributes="1">
-                      <Component id="jScrollPane1" min="0" pref="147" max="32767" attributes="2"/>
-                      <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="jScrollPane1" min="0" pref="147" max="32767" attributes="2"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jLabel7" min="-2" max="-2" attributes="0"/>

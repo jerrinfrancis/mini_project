@@ -11,7 +11,7 @@
 package UIcomponents;
 import dbconnect.*;
 import java.util.Vector;
-import java.sql.ResultSet;
+import java.sql.*;
 /**
  *
  * @author user
@@ -236,7 +236,75 @@ public class Ppanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
 private void submitbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitbuttonActionPerformed
-// TODO add your handling code here:
+try{
+    int num_rows_hr,num_rows_phy;
+    num_rows_hr=hrtable.getModel().getRowCount();
+    num_rows_phy=phytable.getModel().getRowCount();
+    int i=0,flag_hr=0,flag_phy=0;
+    String phyres_name,temp,temp1;
+    Object phyres_n,hrres_n;
+    String hrres_name;
+    int phyres_qty,hrres_qty;
+    DBquery hr_phy =new DBquery();
+    int phy_id;
+    String query,query1;
+    while(i<num_rows_phy)
+    {
+   phyres_n=phytable.getValueAt(i, 0);
+   phyres_name= (String) phyres_n;
+   phyres_n=phytable.getValueAt(i, 1);
+   temp = (String) phyres_n;
+   query="SELECT res_id FROM phy_resource WHERE res_name ="+"'"+phyres_name + "'";
+   phyres_qty= Integer.parseInt(temp);
+   ResultSet phy_result = hr_phy.generalQuery("SELECT * FROM available_phy "); 
+   ResultSet phyid =hr_phy.generalQuery(query);
+   phyid.next();
+   phy_id = phyid.getInt(1);
+   while(phy_result.next())
+   {
+       if(phy_result.getInt(1)==phy_id)
+       {
+           if(phy_result.getInt(2)<phyres_qty)
+           {
+               flag_phy=1;
+           }
+       }
+   }
+       
+    
+  }
+    i=0;
+    int spec_id;
+while(i<num_rows_hr)
+{
+ hrres_n=hrtable.getValueAt(i, 0);
+ hrres_name =(String) hrres_n;
+ hrres_n=hrtable.getValueAt(i, 1);
+ temp1= (String) hrres_n;
+ hrres_qty=Integer.parseInt(temp1);
+ query1="SELECT spec_id FROM specialisation WHERE spec_name=" + "'" + hrres_name +"'";
+ ResultSet hr_result = hr_phy.generalQuery("SELECT specid,avail_qty FROM hr_total_avail");
+ ResultSet specid =hr_phy.generalQuery(query1);
+ specid.next();
+ spec_id=specid.getInt(1);
+ while(hr_result.next())
+ {
+     if(hr_result.getInt(1)==spec_id)
+     {
+         if(hr_result.getInt(2)<hrres_qty)
+         {
+          flag_hr=1;   
+         }
+     }
+ }
+}
+
+}
+catch(Exception ex)
+{
+    System.out.println("Exception at Ppanel sql :");
+   
+}
 }//GEN-LAST:event_submitbuttonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
