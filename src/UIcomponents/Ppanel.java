@@ -254,8 +254,8 @@ try{
    phyres_name= (String) phyres_n;
    phyres_n=phytable.getValueAt(i, 1);
    temp = (String) phyres_n;
-   query="SELECT res_id FROM phy_resource WHERE res_name ="+"'"+phyres_name + "'";
    phyres_qty= Integer.parseInt(temp);
+   query="SELECT res_id FROM phy_resource WHERE res_name ="+"'"+phyres_name + "'";
    ResultSet phy_result = hr_phy.generalQuery("SELECT * FROM available_phy "); 
    ResultSet phyid =hr_phy.generalQuery(query);
    phyid.next();
@@ -298,6 +298,43 @@ while(i<num_rows_hr)
      }
  }
 }
+i=0;
+String query2,query3,query4,query5;
+DBinsert update_phy = new DBinsert();
+if(flag_hr==0 && flag_phy==0)
+{
+        
+    while(i<num_rows_phy)
+    {
+        phyres_n=phytable.getValueAt(i, 0);
+        phyres_name= (String) phyres_n;
+        phyres_n=phytable.getValueAt(i, 1);
+        temp = (String) phyres_n;
+        phyres_qty= Integer.parseInt(temp);
+        query2="SELECT res_id FROM phy_resource WHERE res_name ="+"'"+phyres_name + "'";
+        ResultSet phyid =hr_phy.generalQuery(query2);
+        phyid.next();
+        phy_id = phyid.getInt(1);
+        query3="UPDATE available_phy SET qty = qty -" + phyres_qty +"WHERE avail_resid=" + phy_id ;
+        update_phy.generalInsert(query3);
+    }
+    i=0;
+    while(i<num_rows_hr)
+    {
+        hrres_n=hrtable.getValueAt(i, 0);
+        hrres_name =(String) hrres_n;
+        hrres_n=hrtable.getValueAt(i, 1);
+        temp1= (String) hrres_n;
+        hrres_qty=Integer.parseInt(temp1);
+        query4="SELECT spec_id FROM specialisation WHERE spec_name=" + "'" + hrres_name +"'";
+        ResultSet specid =hr_phy.generalQuery(query4);
+        specid.next();
+        spec_id=specid.getInt(1);
+        query5="UPDATE hr_total_avail SET avail_qty = avail_qty-" + hrres_qty + "WHERE specid =" + spec_id;
+        update_phy.generalInsert(query5);
+    }
+}
+
 
 }
 catch(Exception ex)
