@@ -176,16 +176,24 @@ private void submitbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
                 statmnt="UPDATE phy_resource SET insta =insta + " + qt+ " WHERE res_name='" + ra.getString(2) + "'"; 
                 System.out.println(statmnt);
                 ab.generalInsert(statmnt);
-                
+                statmnt="UPDATE available_phy SET qty=qty + " + qt + " WHERE avail_resid=" + ra.getInt(1);
+                ab.generalInsert(statmnt);            
                 
             }
             
         }
         if(flag==0)
-        {
+        {   String s;
+       
+            DBinsert av_phy=new DBinsert();
             Resource r = new Resource(name,qt);
             DBinsert ac =new DBinsert();
             ac.addResource(r);
+            s="SELECT res_id FROM phy_resource WHERE res_name='" + name +"'";
+            ResultSet phy_id=db.generalQuery(s);
+            phy_id.next();
+            s="INSERT INTO available_phy VALUES("+ phy_id.getInt(1) + "," + qt+ ")";
+            av_phy.generalInsert(s);
             
         }
         

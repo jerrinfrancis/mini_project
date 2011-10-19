@@ -297,12 +297,13 @@ try{
     query="SELECT * FROM project WHERE status=1";
     ResultSet awaiting_pro = hr_phy.generalQuery(query);
     while(awaiting_pro.next())
-    {
+    {  System.out.println("Not to be printed now 1");
         flag_alloc=1;
     }
     
     while(i<num_rows_phy)
     {
+   System.out.println(" to be printed now 1");
    phyres_n=phytable.getValueAt(i, 0);
    phyres_name= (String) phyres_n;
    phyres_n=phytable.getValueAt(i, 1);
@@ -319,6 +320,7 @@ try{
        {
            if(phy_result.getInt(2)<phyres_qty)
            {
+               System.out.println("Not to be printed now 2");
                flag_phy=1;
            }
        }
@@ -330,6 +332,7 @@ try{
     int spec_id;
 while(i<num_rows_hr)
 {
+    System.out.println(" to be printed now2 ");
  hrres_n=hrtable.getValueAt(i, 0);
  hrres_name =(String) hrres_n;
  hrres_n=hrtable.getValueAt(i, 1);
@@ -347,6 +350,7 @@ while(i<num_rows_hr)
          if(hr_result.getInt(2)<hrres_qty)
          {
           flag_hr=1;   
+          System.out.println("Not to be printed now3");
          }
      }
  }
@@ -358,6 +362,7 @@ DBinsert update_phy = new DBinsert();
 DBinsert update_project = new DBinsert();
 if(flag_hr==0 && flag_phy==0 && flag_alloc==0)
 {
+    System.out.println(" to be printed now 3");
        String project_add; 
        project_add="INSERT INTO project VALUES(pid_seq.nextval,'" + Pname +
                "',SYSDATE,SYSDATE +" + duration + ",0,'" + del_date + "',"
@@ -366,6 +371,8 @@ if(flag_hr==0 && flag_phy==0 && flag_alloc==0)
        
     while(i<num_rows_phy)
     {
+        
+        System.out.println(" to be printed now 4");
         phyres_n=phytable.getValueAt(i, 0);
         phyres_name= (String) phyres_n;
         phyres_n=phytable.getValueAt(i, 1);
@@ -378,14 +385,15 @@ if(flag_hr==0 && flag_phy==0 && flag_alloc==0)
         query3="INSERT INTO allocated_phy_resource VALUES(pid_seq.currval," + phy_id +"," + phyres_qty 
                 + ")";
         update_phy.generalInsert(query3);
-        query3="UPDATE available_phy SET qty = qty -" + phyres_qty +"WHERE avail_resid=" + phy_id ;
-        update.Create_Other_Table(query3);
+        query3="UPDATE available_phy SET qty = qty -" + phyres_qty +" WHERE avail_resid=" + phy_id ;
+        update_phy.generalInsert(query3);
         i++;
     }
     i=0;
     while(i<num_rows_hr)
     {   
         j=0;
+        System.out.println(" to be printed now 5");
         hrres_n=hrtable.getValueAt(i, 0);
         hrres_name =(String) hrres_n;
         hrres_n=hrtable.getValueAt(i, 1);
@@ -395,22 +403,22 @@ if(flag_hr==0 && flag_phy==0 && flag_alloc==0)
         ResultSet specid =hr_phy.generalQuery(query4);
         specid.next();
         spec_id=specid.getInt(1);
-        query4="SELECT * FROM employee WHERE status=0 AND spec_id='" + spec_id + "'";
+        query4="SELECT * FROM employee WHERE status=0 AND spec_id=" + spec_id ;
         ResultSet emp = hr_phy.generalQuery(query4);
         while(j<hrres_qty)
-        {
+        {   System.out.println(" to be printed now 6");
             emp.next();
             employeeid=emp.getString(1);
             query4="INSERT INTO allocated_employees VALUES(pid_seq.currval,'" + employeeid
                     +"')";
             update_phy.generalInsert(query4);
             query4="UPDATE employee SET status=1 WHERE emp_id='" + employeeid + "'";
-            update.Create_Other_Table(query4);
+            update_phy.generalInsert(query4);
             j++;
             
         }
         query5="UPDATE hr_total_avail SET avail_qty = avail_qty-" + hrres_qty + "WHERE specid =" + spec_id;
-        update.Create_Other_Table(query5);
+        update_phy.generalInsert(query5);
         query5="INSERT INTO allocated_HR VALUES(pid_seq.currval," + spec_id + "," + hrres_qty + ")";
         update_phy.generalInsert(query5);
         i++;

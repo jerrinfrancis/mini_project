@@ -271,33 +271,8 @@ private void submitbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
         ResultSet result = retrieve_spec_id.generalQuery(stat);
         result.next();
         spec_id = result.getInt(1);
-        DBquery retrieve_from_hr_avail = new DBquery();
-        String retrive = " SELECT specid FROM hr_total_avail";
-        ResultSet res = retrieve_from_hr_avail.generalQuery(retrive);
+     
         short flag=0;
-        String hr_update;
-        while(res.next())
-        {
-            if(res.getInt(1)==spec_id)
-            {   
-                flag=1;
-                hr_update="UPDATE hr_total_avail SET tot_qty= tot_qty + 1,avail_qty=avail_qty + 1 WHERE specid ="
-                       + spec_id ;  
-                DBcreate hr = new DBcreate();
-                hr.Create_Other_Table(hr_update);
-            }
-        }
-        if(flag==0)
-        {
-        DBinsert hr_avail_insert = new DBinsert();    
-        String hr_availibility_update;
-        hr_availibility_update = "INSERT INTO hr_total_avail VALUES(" +
-                spec_id + ",1,1)";
-        hr_avail_insert.generalInsert(hr_availibility_update);
-            
-        }
-       
-        flag=0;
         DBquery check_empid = new DBquery();
         ResultSet result_empid = check_empid.generalQuery("SELECT emp_id FROM employee");
         while(result_empid.next())
@@ -323,6 +298,32 @@ private void submitbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                     JOptionPane.WARNING_MESSAGE);
             throw(new Exception());
         }
+           DBquery retrieve_from_hr_avail = new DBquery();
+        String retrive = " SELECT specid FROM hr_total_avail";
+        ResultSet res = retrieve_from_hr_avail.generalQuery(retrive);
+         flag=0;
+        String hr_update;
+        while(res.next())
+        {
+            if(res.getInt(1)==spec_id)
+            {   
+                flag=1;
+                hr_update="UPDATE hr_total_avail SET tot_qty= tot_qty + 1,avail_qty=avail_qty + 1 WHERE specid ="
+                       + spec_id ;  
+                DBcreate hr = new DBcreate();
+                hr.Create_Other_Table(hr_update);
+            }
+        }
+        if(flag==0)
+        {
+        DBinsert hr_avail_insert = new DBinsert();    
+        String hr_availibility_update;
+        hr_availibility_update = "INSERT INTO hr_total_avail VALUES(" +
+                spec_id + ",1,1)";
+        hr_avail_insert.generalInsert(hr_availibility_update);
+            
+        }
+       
         double test = Double.parseDouble(phno);
         int status=0;
         Employee emp = new Employee(empid,name,address,spec_id,phno,jy1,jm1,jd1,status);
