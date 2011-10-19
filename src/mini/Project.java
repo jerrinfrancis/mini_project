@@ -24,8 +24,9 @@ public class Project {
     private int del_day,del_month,del_year;
     private int duration;
     private int revenue;    
+    private int status;
     public Project(String name,int sy,int sm,int sd,int ey,int em,int ed,int p,
-            int dy,int dm,int dd,int due){
+            int dy,int dm,int dd,int due,int reve,int stat){
       
         proj_name = name;
         start_year=sy;
@@ -39,9 +40,14 @@ public class Project {
         del_year=dy;
         duration=due;
         priority = p;
+        revenue=reve;
+        status=stat;
     }
     
-   
+    public int get_status()
+    {
+        return status;
+    }
     public String getProName(){
         return proj_name;
     }
@@ -64,6 +70,10 @@ public class Project {
      public int get_duration()
      {
          return duration;
+     }
+     public int get_revenue()
+     {
+     return revenue;
      }
 };
 
