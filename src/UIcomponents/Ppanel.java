@@ -269,9 +269,14 @@ public class Ppanel extends javax.swing.JPanel {
 
 private void submitbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitbuttonActionPerformed
 try{
-    javax.swing.table.DefaultTableModel d_1 = (javax.swing.table.DefaultTableModel) phytable.getModel();
-    javax.swing.table.DefaultTableModel e = (javax.swing.table.DefaultTableModel) hrtable.getModel();
-    
+    //javax.swing.table.DefaultTableModel d_1 = (javax.swing.table.DefaultTableModel) phytable.getModel();
+    //javax.swing.table.DefaultTableModel e = (javax.swing.table.DefaultTableModel) hrtable.getModel();
+    if(phytable.isEditing()){
+        phytable.getCellEditor().stopCellEditing();
+    }
+    if(hrtable.isEditing()){
+        hrtable.getCellEditor().stopCellEditing();
+    }
   
     DBcreate update= new DBcreate();
     Project P;
@@ -306,8 +311,8 @@ try{
     {  System.out.println("Not to be printed now 1");
         flag_alloc=1;
     }
-    d_1.fireTableCellUpdated(0,1);
-    e.fireTableCellUpdated(0,1);
+    //d_1.fireTableCellUpdated(0,1);
+    //e.fireTableCellUpdated(0,1);
     while(i<num_rows_phy)
     {
    System.out.println(" to be printed now 1");

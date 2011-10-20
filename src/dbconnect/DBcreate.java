@@ -264,7 +264,7 @@ class tes{
     public static void main(String args[]) throws Throwable {
         try{
         DBcreate Db = new DBcreate();
-     Db.Set_Database_Creation_Tables();
+    Db.Set_Database_Creation_Tables();
    // Db.Destroy_Entire_Database();      
             }
         catch(ClassNotFoundException e)
