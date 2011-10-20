@@ -14,6 +14,7 @@ import java.util.Vector;
 import java.sql.*;
 import mini.*;
 import javax.swing.*;
+import java.util.Date;
 /**
  *
  * @author user
@@ -268,9 +269,8 @@ public class Ppanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
 private void submitbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitbuttonActionPerformed
-try{
-    //javax.swing.table.DefaultTableModel d_1 = (javax.swing.table.DefaultTableModel) phytable.getModel();
-    //javax.swing.table.DefaultTableModel e = (javax.swing.table.DefaultTableModel) hrtable.getModel();
+try{    
+    
     if(phytable.isEditing()){
         phytable.getCellEditor().stopCellEditing();
     }
@@ -290,13 +290,84 @@ try{
     int dyear = model3.getNumber().intValue();
     String Pname = jTextName.getText();
     String d=jTextDuration.getText();
-    int duration = Integer.parseInt(d);
-    d=jTextRevenue.getText();
-    int revenue=Integer.parseInt(d);
+    int duration=0,revenue=0;
+    if(d.length()!=0)
+    {
+         duration = Integer.parseInt(d);
+    }
+    String d1=jTextRevenue.getText();
+    if(d1.length()!=0)
+    {
+         revenue=Integer.parseInt(d1);
+    }
     String del_date=Create_date(dday,dmonth,dyear);
     int num_rows_hr,num_rows_phy;
     num_rows_hr=hrtable.getModel().getRowCount();
     num_rows_phy=phytable.getModel().getRowCount();
+    if(Pname==null||Pname.length()==0||d==null||d.length()==0||d1==null||d1.length()==0)
+    {
+        
+        JOptionPane.showMessageDialog(null,"Empty  fields not allowed..!!","Empty Field Error",
+                    JOptionPane.WARNING_MESSAGE);
+            throw(new Exception());
+    }
+    if(duration==0)
+    {
+         JOptionPane.showMessageDialog(null,"Duration cannot be Zero..!!","Project Duration Error",
+                    JOptionPane.WARNING_MESSAGE);
+            throw(new Exception());
+    }
+    if(revenue==0)
+    {
+         JOptionPane.showMessageDialog(null,"Revenue cannot be zero..!!","Revenue  Error",
+                    JOptionPane.WARNING_MESSAGE);
+            throw(new Exception());
+    }
+    
+    if(num_rows_hr==0||num_rows_phy==0)
+    {
+         JOptionPane.showMessageDialog(null,"No resource added to the database","Resource database empty ",
+                    JOptionPane.WARNING_MESSAGE);
+            throw(new Exception());
+    }
+    String chk_del_date ="SELECT EXTRACT(DAY FROM SYSDATE) FROM DUAL";
+    DBquery chk_date =new DBquery();
+    ResultSet date_del_sys = chk_date.generalQuery(chk_del_date);
+    date_del_sys.next();
+    System.out.println("chk");
+    int sys_day = date_del_sys.getInt(1);
+    chk_del_date ="SELECT EXTRACT(MONTH FROM SYSDATE) FROM DUAL";
+    ResultSet date_del_month_sys = chk_date.generalQuery(chk_del_date);
+    date_del_month_sys.next();
+    int sys_month=date_del_month_sys.getInt(1);
+    chk_del_date ="SELECT EXTRACT(YEAR FROM SYSDATE) FROM DUAL";
+    ResultSet date_del_year_sys = chk_date.generalQuery(chk_del_date);
+    date_del_year_sys.next();
+    int sys_year=date_del_year_sys.getInt(1);
+    
+   
+    if(dyear<sys_year)
+    {
+          System.out.println("chk");
+        JOptionPane.showMessageDialog(null,"Delivery date cannot be less than current date..!!","Delivery date  Error",
+                    JOptionPane.WARNING_MESSAGE);
+            throw(new Exception());
+    }
+    else if(dmonth<sys_month && dyear<sys_year)
+     {
+                 System.out.println("chk");
+        JOptionPane.showMessageDialog(null,"Delivery date cannot be less than current date..!!","Delivery date  Error",
+                    JOptionPane.WARNING_MESSAGE);
+            throw(new Exception());
+                
+     }
+    else if(dday<sys_day && dmonth<sys_month && dyear<sys_year)
+    {
+      System.out.println("chk");
+        JOptionPane.showMessageDialog(null,"Delivery date cannot be less than current date..!!","Delivery date  Error",
+                    JOptionPane.WARNING_MESSAGE);
+            throw(new Exception());   
+    }
     int i=0,flag=0,flag_hr=0,flag_phy=0,flag_alloc=0,j=0;
     String phyres_name,temp,temp1;
     Object phyres_n,hrres_n;
@@ -311,8 +382,7 @@ try{
     {  System.out.println("Not to be printed now 1");
         flag_alloc=1;
     }
-    //d_1.fireTableCellUpdated(0,1);
-    //e.fireTableCellUpdated(0,1);
+    int main_flag_phy=0,main_flag_hr=0;
     while(i<num_rows_phy)
     {
    System.out.println(" to be printed now 1");
@@ -322,6 +392,10 @@ try{
    temp = (String) phyres_n;
    System.out.println(temp);
    phyres_qty= Integer.parseInt(temp);
+   if(phyres_qty==0)
+   {
+       main_flag_phy++;
+   }
    System.out.println(phyres_qty);
    System.out.println(phyres_name);
    query="SELECT res_id FROM phy_resource WHERE res_name ="+"'"+phyres_name + "'";
@@ -355,6 +429,10 @@ while(i<num_rows_hr)
  hrres_n=hrtable.getValueAt(i, 1);
  temp1= (String) hrres_n;
  hrres_qty=Integer.parseInt(temp1);
+ if(hrres_qty==0)
+ {
+     main_flag_hr++;
+ }
  System.out.println(hrres_qty);
  System.out.println(hrres_name);
  query1="SELECT spec_id FROM specialisation WHERE spec_name=" + "'" + hrres_name +"'";
@@ -376,6 +454,12 @@ while(i<num_rows_hr)
      }
  }
  i++;
+}
+if(main_flag_hr==num_rows_hr||main_flag_phy==num_rows_phy)
+{
+     JOptionPane.showMessageDialog(null,"Either Physical or Human resource Empty..!!","Empty Resource Project Error",
+                    JOptionPane.WARNING_MESSAGE);
+            throw(new Exception());
 }
 i=0;
 String query2,query3,query4,query5;
