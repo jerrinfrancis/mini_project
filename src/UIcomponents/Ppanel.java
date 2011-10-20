@@ -25,6 +25,8 @@ public class Ppanel extends javax.swing.JPanel {
     private static Vector<String> header_phy;
     /** Creates new form Ppanel */
     public Ppanel() {
+     //   phytable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+     //   hrtable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
         data_hr = new Vector<Vector<String>>();
         data_phy = new Vector<Vector<String>>();
         try{
@@ -267,6 +269,10 @@ public class Ppanel extends javax.swing.JPanel {
 
 private void submitbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitbuttonActionPerformed
 try{
+    javax.swing.table.DefaultTableModel d_1 = (javax.swing.table.DefaultTableModel) phytable.getModel();
+    javax.swing.table.DefaultTableModel e = (javax.swing.table.DefaultTableModel) hrtable.getModel();
+    
+  
     DBcreate update= new DBcreate();
     Project P;
     String employeeid;
@@ -300,20 +306,26 @@ try{
     {  System.out.println("Not to be printed now 1");
         flag_alloc=1;
     }
-    
+    d_1.fireTableCellUpdated(0,1);
+    e.fireTableCellUpdated(0,1);
     while(i<num_rows_phy)
     {
    System.out.println(" to be printed now 1");
    phyres_n=phytable.getValueAt(i, 0);
    phyres_name= (String) phyres_n;
-   phyres_n=phytable.getValueAt(i, 1);
+   phyres_n=phytable.getValueAt(i,1);
    temp = (String) phyres_n;
+   System.out.println(temp);
    phyres_qty= Integer.parseInt(temp);
+   System.out.println(phyres_qty);
+   System.out.println(phyres_name);
    query="SELECT res_id FROM phy_resource WHERE res_name ="+"'"+phyres_name + "'";
+   System.out.println(query);
    ResultSet phy_result = hr_phy.generalQuery("SELECT * FROM available_phy "); 
    ResultSet phyid =hr_phy.generalQuery(query);
    phyid.next();
    phy_id = phyid.getInt(1);
+   System.out.println(phy_id);
    while(phy_result.next())
    {
        if(phy_result.getInt(1)==phy_id)
@@ -338,11 +350,15 @@ while(i<num_rows_hr)
  hrres_n=hrtable.getValueAt(i, 1);
  temp1= (String) hrres_n;
  hrres_qty=Integer.parseInt(temp1);
+ System.out.println(hrres_qty);
+ System.out.println(hrres_name);
  query1="SELECT spec_id FROM specialisation WHERE spec_name=" + "'" + hrres_name +"'";
+ System.out.println(query1);
  ResultSet hr_result = hr_phy.generalQuery("SELECT specid,avail_qty FROM hr_total_avail");
  ResultSet specid =hr_phy.generalQuery(query1);
  specid.next();
  spec_id=specid.getInt(1);
+ System.out.println(spec_id);
  while(hr_result.next())
  {
      if(hr_result.getInt(1)==spec_id)
@@ -378,14 +394,20 @@ if(flag_hr==0 && flag_phy==0 && flag_alloc==0)
         phyres_n=phytable.getValueAt(i, 1);
         temp = (String) phyres_n;
         phyres_qty= Integer.parseInt(temp);
+        System.out.println(phyres_qty);
+        System.out.println(phyres_name);
         query2="SELECT res_id FROM phy_resource WHERE res_name ="+"'"+phyres_name + "'";
+        System.out.println(query2);
         ResultSet phyid =hr_phy.generalQuery(query2);
         phyid.next();
         phy_id = phyid.getInt(1);
+        System.out.println(phy_id);
         query3="INSERT INTO allocated_phy_resource VALUES(pid_seq.currval," + phy_id +"," + phyres_qty 
                 + ")";
+        System.out.println(query3);
         update_phy.generalInsert(query3);
         query3="UPDATE available_phy SET qty = qty -" + phyres_qty +" WHERE avail_resid=" + phy_id ;
+        System.out.println(query3);
         update_phy.generalInsert(query3);
         i++;
     }
@@ -399,11 +421,16 @@ if(flag_hr==0 && flag_phy==0 && flag_alloc==0)
         hrres_n=hrtable.getValueAt(i, 1);
         temp1= (String) hrres_n;
         hrres_qty=Integer.parseInt(temp1);
+        System.out.println(hrres_qty);
+        System.out.println(hrres_name);
         query4="SELECT spec_id FROM specialisation WHERE spec_name=" + "'" + hrres_name +"'";
+        System.out.println(query4);
         ResultSet specid =hr_phy.generalQuery(query4);
         specid.next();
         spec_id=specid.getInt(1);
+        System.out.println(spec_id);
         query4="SELECT * FROM employee WHERE status=0 AND spec_id=" + spec_id ;
+        System.out.println(query4);
         ResultSet emp = hr_phy.generalQuery(query4);
         while(j<hrres_qty)
         {   System.out.println(" to be printed now 6");
@@ -411,15 +438,20 @@ if(flag_hr==0 && flag_phy==0 && flag_alloc==0)
             employeeid=emp.getString(1);
             query4="INSERT INTO allocated_employees VALUES(pid_seq.currval,'" + employeeid
                     +"')";
+            System.out.println(query4);
             update_phy.generalInsert(query4);
+            
             query4="UPDATE employee SET status=1 WHERE emp_id='" + employeeid + "'";
+            System.out.println(query4);
             update_phy.generalInsert(query4);
             j++;
             
         }
-        query5="UPDATE hr_total_avail SET avail_qty = avail_qty-" + hrres_qty + "WHERE specid =" + spec_id;
+        query5="UPDATE hr_total_avail SET avail_qty = avail_qty-" + hrres_qty + " WHERE specid =" + spec_id;
+        System.out.println(query5);
         update_phy.generalInsert(query5);
         query5="INSERT INTO allocated_HR VALUES(pid_seq.currval," + spec_id + "," + hrres_qty + ")";
+        System.out.println(query5);
         update_phy.generalInsert(query5);
         i++;
     }
